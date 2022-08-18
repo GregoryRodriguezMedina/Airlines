@@ -26,13 +26,15 @@ namespace AirLines.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<map.AirPortMap>();
+            
             modelBuilder.Entity<AirPort>(entity =>
             {
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
             });
-
+            
             modelBuilder.Entity<Book>(entity =>
             {
                 entity.Property(e => e.CheckIn).HasColumnType("datetime");
