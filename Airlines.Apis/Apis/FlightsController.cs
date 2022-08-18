@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Airlines.Apis.Data;
-using Airlines.Apis.Models;
+using AirLines.Infrastructure.Data;
+using AirLines.Core.Models;
 
 namespace Airlines.Apis.Apis
 {

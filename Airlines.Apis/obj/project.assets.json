@@ -3177,6 +3177,33 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
+      },
+      "AirLines.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/AirLines.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AirLines.Core.dll": {}
+        }
+      },
+      "AirLines.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "AirLines.Core": "1.0.0",
+          "Microsoft.AspNetCore.Mvc.NewtonsoftJson": "6.0.7",
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.8",
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "6.0.8",
+          "Swashbuckle.AspNetCore": "6.2.3"
+        },
+        "compile": {
+          "bin/placeholder/AirLines.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AirLines.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -9749,10 +9776,22 @@
         "system.xml.xdocument.4.3.0.nupkg.sha512",
         "system.xml.xdocument.nuspec"
       ]
+    },
+    "AirLines.Core/1.0.0": {
+      "type": "project",
+      "path": "../AirLines.Core/AirLines.Core.csproj",
+      "msbuildProject": "../AirLines.Core/AirLines.Core.csproj"
+    },
+    "AirLines.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../AirLines.Infrastructure/AirLines.Infrastructure.csproj",
+      "msbuildProject": "../AirLines.Infrastructure/AirLines.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "AirLines.Core >= 1.0.0",
+      "AirLines.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.NewtonsoftJson >= 6.0.7",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.8",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.8",
@@ -9787,7 +9826,14 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\ASP.NET\\Flights\\Airlines\\AirLines.Core\\AirLines.Core.csproj": {
+              "projectPath": "D:\\ASP.NET\\Flights\\Airlines\\AirLines.Core\\AirLines.Core.csproj"
+            },
+            "D:\\ASP.NET\\Flights\\Airlines\\AirLines.Infrastructure\\AirLines.Infrastructure.csproj": {
+              "projectPath": "D:\\ASP.NET\\Flights\\Airlines\\AirLines.Infrastructure\\AirLines.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

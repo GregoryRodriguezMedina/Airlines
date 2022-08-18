@@ -263,3 +263,7 @@ D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\refint\Airlines.Apis.
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.pdb
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.genruntimeconfig.cache
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\ref\Airlines.Apis.dll
+D:\ASP.NET\Flights\Airlines\Airlines.Apis\bin\Debug\net6.0\AirLines.Core.dll
+D:\ASP.NET\Flights\Airlines\Airlines.Apis\bin\Debug\net6.0\AirLines.Infrastructure.dll
+D:\ASP.NET\Flights\Airlines\Airlines.Apis\bin\Debug\net6.0\AirLines.Core.pdb
+D:\ASP.NET\Flights\Airlines\Airlines.Apis\bin\Debug\net6.0\AirLines.Infrastructure.pdb

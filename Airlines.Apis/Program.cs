@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<Airlines.Apis.Data.AirlinesContext>(
+builder.Services.AddDbContext<AirLines.Infrastructure.Data.AirlinesContext>(
     options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("AirlinesConnection"));

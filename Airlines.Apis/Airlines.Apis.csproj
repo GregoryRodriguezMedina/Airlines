@@ -21,4 +21,9 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AirLines.Core\AirLines.Core.csproj" />
+    <ProjectReference Include="..\AirLines.Infrastructure\AirLines.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
