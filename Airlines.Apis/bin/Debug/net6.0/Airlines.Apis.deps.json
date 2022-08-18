@@ -2297,6 +2297,9 @@
         }
       },
       "AirLines.Core/1.0.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.8"
+        },
         "runtime": {
           "AirLines.Core.dll": {}
         }

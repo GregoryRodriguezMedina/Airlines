@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AirLines.Infrastructure.Data;
 using AirLines.Core.Models;
+using AirLines.Infrastructure.Data.Services;
 
 namespace Airlines.Apis.Apis
 {
@@ -14,40 +15,43 @@ namespace Airlines.Apis.Apis
     [ApiController]
     public class AirPortsController : ControllerBase
     {
-        private readonly AirlinesContext _context;
+        private readonly IAirPortService AirPortService;
 
-        public AirPortsController(AirlinesContext context)
+        //private readonly AirlinesContext _context;
+
+        public AirPortsController(IAirPortService airPortService)//AirlinesContext context)
         {
-            _context = context;
+            this.AirPortService = airPortService;
+            //_context = context;
         }
 
         // GET: api/AirPorts
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AirPort>>> GetAirPorts()
-        {
-          if (_context.AirPorts == null)
-          {
-              return NotFound();
-          }
-            return await _context.AirPorts.ToListAsync();
+        {         
+            var results=  await this.AirPortService.Get();
+
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
         }
 
         // GET: api/AirPorts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AirPort>> GetAirPort(int id)
         {
-          if (_context.AirPorts == null)
-          {
-              return NotFound();
-          }
-            var airPort = await _context.AirPorts.FindAsync(id);
 
-            if (airPort == null)
+            var results = await this.AirPortService.GetById(id);
+
+            if (results == null)
             {
                 return NotFound();
             }
 
-            return airPort;
+            return Ok(results);
         }
 
         // PUT: api/AirPorts/5
@@ -59,16 +63,18 @@ namespace Airlines.Apis.Apis
             {
                 return BadRequest();
             }
-
-            _context.Entry(airPort).State = EntityState.Modified;
-
+            
             try
             {
-                await _context.SaveChangesAsync();
+                var result = await this.AirPortService.Put(id, airPort);
+                if(!result)
+                {
+                    return NotFound();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AirPortExists(id))
+                if (!await AirPortExists(id))
                 {
                     return NotFound();
                 }
@@ -86,12 +92,23 @@ namespace Airlines.Apis.Apis
         [HttpPost]
         public async Task<ActionResult<AirPort>> PostAirPort(AirPort airPort)
         {
-          if (_context.AirPorts == null)
+          if (airPort == null)
           {
-              return Problem("Entity set 'AirlinesContext.AirPorts'  is null.");
+              return Problem("the AirPort  is null.");
           }
-            _context.AirPorts.Add(airPort);
-            await _context.SaveChangesAsync();
+
+            try
+            {
+                var result = await this.AirPortService.Add(airPort);
+                if (!result)
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error while try to inserting row.");
+            }
 
             return CreatedAtAction("GetAirPort", new { id = airPort.Id }, airPort);
         }
@@ -100,25 +117,37 @@ namespace Airlines.Apis.Apis
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAirPort(int id)
         {
-            if (_context.AirPorts == null)
+            if (id == 0)
             {
-                return NotFound();
-            }
-            var airPort = await _context.AirPorts.FindAsync(id);
-            if (airPort == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.AirPorts.Remove(airPort);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var result = await this.AirPortService.Remove(id);
+                if (!result)
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception)
+            {
+                if (!await AirPortExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
 
-        private bool AirPortExists(int id)
+        private async Task<bool> AirPortExists(int id)
         {
-            return (_context.AirPorts?.Any(e => e.Id == id)).GetValueOrDefault();
+            return await this.AirPortService.Exists(id);
         }
     }
 }

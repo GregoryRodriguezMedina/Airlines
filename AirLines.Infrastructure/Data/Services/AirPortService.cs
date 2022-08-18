@@ -7,7 +7,17 @@ using System.Threading.Tasks;
 
 namespace AirLines.Infrastructure.Data.Services
 {
-    public partial class AirPortService
+    public interface IAirPortService
+    {
+        Task<IEnumerable<Core.Models.AirPort>> Get();
+        Task<Core.Models.AirPort> GetById(int id);
+        Task<bool> Add(Core.Models.AirPort airPort);
+        Task<bool> Put(int id, Core.Models.AirPort airPort);
+        Task<bool> Remove(int id);
+        Task<bool> Exists(int id);
+    }
+
+    public partial class AirPortService : IAirPortService
     {
         private readonly repository.IAirPortRepository repository;
 
@@ -43,6 +53,10 @@ namespace AirLines.Infrastructure.Data.Services
 
             return await this.repository.DeleteAsync(airPort);
         }
-      
+
+        public async Task<bool> Exists(int id)
+        {
+            return await this.repository.Exists(id);
+        }
     }
 }

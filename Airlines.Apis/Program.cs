@@ -1,3 +1,4 @@
+using AirLines.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,9 @@ builder.Services.AddDbContext<AirLines.Infrastructure.Data.AirlinesContext>(
 
 builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+builder.Services.AddScopedData();
+builder.Services.AddTransientData();
 
 var app = builder.Build();
 
