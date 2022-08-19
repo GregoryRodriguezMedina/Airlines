@@ -27,8 +27,8 @@ namespace Airlines.Apis.Apis
 
         // GET: api/AirPorts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.AirPortResorce>>> GetAirPorts()
-        {         
+        public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.AirPortResponse>>> GetAirPorts()
+        {           
             var results=  await this.AirPortService.Get();
 
             if (results == null)
@@ -41,7 +41,7 @@ namespace Airlines.Apis.Apis
 
         // GET: api/AirPorts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AirLines.Core.Resources.AirPortResorce>> GetAirPort(int id)
+        public async Task<ActionResult<AirLines.Core.Resources.AirPortResponse>> GetAirPort(int id)
         {
 
             var results = await this.AirPortService.GetById(id);

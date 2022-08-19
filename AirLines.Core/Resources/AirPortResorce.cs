@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AirLines.Core.Resources
 {
-    public class AirPortResorce
+     public abstract class AirPortResorce
     {
         public int Id { get; set; }
         public string Name { get; set; }
