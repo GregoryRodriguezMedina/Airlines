@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AirLines.Infrastructure.Data;
-using AirLines.Core.Models;
+using AirLines.Infrastructure.Data.Services;
 
 namespace Airlines.Apis.Apis
 {
@@ -14,61 +8,66 @@ namespace Airlines.Apis.Apis
     [ApiController]
     public class PassagersController : ControllerBase
     {
-        private readonly AirlinesContext _context;
+        private readonly IPassagerService PassagerService;
 
-        public PassagersController(AirlinesContext context)
+        //private readonly AirlinesContext _context;
+
+        public PassagersController(IPassagerService PassagerService)//AirlinesContext context)
         {
-            _context = context;
+            this.PassagerService = PassagerService;
+            //_context = context;
         }
 
         // GET: api/Passagers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Passager>>> GetPassagers()
+        public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.PassagerResponse>>> GetPassagers()
         {
-          if (_context.Passagers == null)
-          {
-              return NotFound();
-          }
-            return await _context.Passagers.ToListAsync();
-        }
+            var results = await this.PassagerService.Get();
 
-        // GET: api/Passagers/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Passager>> GetPassager(int id)
-        {
-          if (_context.Passagers == null)
-          {
-              return NotFound();
-          }
-            var passager = await _context.Passagers.FindAsync(id);
-
-            if (passager == null)
+            if (results == null)
             {
                 return NotFound();
             }
 
-            return passager;
+            return Ok(results);
+        }
+
+        // GET: api/Passagers/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AirLines.Core.Resources.PassagerResponse>> GetPassager(int id)
+        {
+
+            var results = await this.PassagerService.GetById(id);
+
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
         }
 
         // PUT: api/Passagers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPassager(int id, Passager passager)
+        public async Task<IActionResult> PutPassager(int id, AirLines.Core.Resources.PassagerRequest Passager)
         {
-            if (id != passager.Id)
+            if (id != Passager.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(passager).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var result = await this.PassagerService.Put(id, Passager);
+                if (!result)
+                {
+                    return NotFound();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PassagerExists(id))
+                if (!await PassagerExists(id))
                 {
                     return NotFound();
                 }
@@ -84,41 +83,65 @@ namespace Airlines.Apis.Apis
         // POST: api/Passagers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Passager>> PostPassager(Passager passager)
+        public async Task<IActionResult> PostPassager(AirLines.Core.Resources.PassagerRequest Passager)
         {
-          if (_context.Passagers == null)
-          {
-              return Problem("Entity set 'AirlinesContext.Passagers'  is null.");
-          }
-            _context.Passagers.Add(passager);
-            await _context.SaveChangesAsync();
+            if (Passager == null)
+            {
+                return Problem("the Passager  is null.");
+            }
 
-            return CreatedAtAction("GetPassager", new { id = passager.Id }, passager);
+            try
+            {
+                var result = await this.PassagerService.Add(Passager);
+                if (!result)
+                {
+                    return NotFound();
+                }
+
+                return CreatedAtAction("GetPassager", new { id = Passager.Id }, Passager);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Error while try to inserting row.");
+            }
         }
 
         // DELETE: api/Passagers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePassager(int id)
         {
-            if (_context.Passagers == null)
+            if (id == 0)
             {
-                return NotFound();
-            }
-            var passager = await _context.Passagers.FindAsync(id);
-            if (passager == null)
-            {
-                return NotFound();
+                return BadRequest();
             }
 
-            _context.Passagers.Remove(passager);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var result = await this.PassagerService.Remove(id);
+                if (!result)
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception)
+            {
+                if (!await PassagerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return NoContent();
         }
 
-        private bool PassagerExists(int id)
+        private async Task<bool> PassagerExists(int id)
         {
-            return (_context.Passagers?.Any(e => e.Id == id)).GetValueOrDefault();
+            return await this.PassagerService.Exists(id);
         }
     }
 }
+

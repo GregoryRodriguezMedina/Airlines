@@ -12,8 +12,9 @@ namespace AirLines.Infrastructure
         {
             services.AddScoped<DbContext, AirlinesContext>();
             services.AddScoped<IAirPortRepository, AirPortRepository>();
-
-           //services.AddTransient<IAirPortService, AirPortService>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IFlightRepository, FlightRepository>();
+            services.AddScoped<IPassagerRepository, PassagerRepository>();
         }
 
         public static void AddTransientData(this IServiceCollection services)
@@ -22,6 +23,9 @@ namespace AirLines.Infrastructure
            // services.AddScoped<IAirPortRepository, AirPortRepository>();
 
             services.AddTransient<IAirPortService, AirPortService>();
+            services.AddTransient<IBookService, BookService>();
+            services.AddTransient<IFlightService, FlightService>();
+            services.AddTransient<IPassagerService, PassagerService>();
         }
     }
 }
