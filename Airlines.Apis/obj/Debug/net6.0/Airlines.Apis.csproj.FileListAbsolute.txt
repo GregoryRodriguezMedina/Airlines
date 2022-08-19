@@ -3,7 +3,6 @@ D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.Generat
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.AssemblyInfoInputs.cache
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.AssemblyInfo.cs
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.csproj.CoreCompileInputs.cache
-D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.MvcApplicationPartsAssemblyInfo.cs
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\obj\Debug\net6.0\Airlines.Apis.MvcApplicationPartsAssemblyInfo.cache
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\bin\Debug\net6.0\appsettings.Development.json
 D:\ASP.NET\Flights\Airlines\Airlines.Apis\bin\Debug\net6.0\appsettings.json

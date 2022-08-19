@@ -1,9 +1,7 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
 using AirLines.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+
 
 
 namespace AirLines.Infrastructure.Data

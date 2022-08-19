@@ -1,9 +1,5 @@
 ﻿using AirLines.Infrastructure.Data.repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace AirLines.Infrastructure.Data.Services
 {
