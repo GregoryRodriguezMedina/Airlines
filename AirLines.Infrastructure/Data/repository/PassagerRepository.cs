@@ -5,7 +5,6 @@ namespace AirLines.Infrastructure.Data.repository
     public interface IPassagerRepository : Core.Repository.IEfRepositoryBase<Core.Models.Passager>
     {
         Task<bool> Exists(int id);
-        Task GetAsync(DateTime from, DateTime to);
     }
     public partial class PassagerRepository : Core.Repository.EfRepositoryBase<Core.Models.Passager>, IPassagerRepository
     {
