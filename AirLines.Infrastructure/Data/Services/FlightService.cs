@@ -1,25 +1,10 @@
 ﻿using AirLines.Core.Transform;
+using AirLines.Core.Types;
 using AirLines.Infrastructure.Data.repository;
 
 
 namespace AirLines.Infrastructure.Data.Services
 {
-    public enum Status
-    {
-        Bording = 0,
-        Depart = 1,
-        Arrive = 2,
-        
-    }
-
-    public enum FlightInclude
-    {
-        Books = 0,
-        FromAirPort = 1,
-        ToAirPort = 2,
-    }
-
-
     public interface IFlightService
     {
         Task<IEnumerable<Core.Resources.FlightResponse>> Get();
@@ -30,6 +15,7 @@ namespace AirLines.Infrastructure.Data.Services
         Task<bool> Exists(int id);
         Task<IEnumerable<Core.Resources.FlightResponse>> Get(int? id, DateTime? from, DateTime? to, DateTime? depart, DateTime? arrival);
         Task<Core.Resources.FlightResponse> GetById(int id, string[] includes);
+        Task<bool> ChangeStatus(int id, int status);
     }
 
     public partial class FlightService : IFlightService
@@ -92,15 +78,23 @@ namespace AirLines.Infrastructure.Data.Services
             return response;
         }
 
-        public async Task<bool> Add(Core.Resources.FlightRequest Flight)
+        public async Task<bool> Add(Core.Resources.FlightRequest flight)
         {
-            var send = FlightMap.TransfromObject(Flight);
+            var send = FlightMap.TransfromObject(flight);
+            send.Status = (int)DefaultStatus;
             return await this.repository.InsertAsync(send);
         }
 
-        public async Task<bool> Put(int id, Core.Resources.FlightRequest Flight)
+        public async Task<bool> Put(int id, Core.Resources.FlightRequest flight)
         {
-            var send = FlightMap.TransfromObject(Flight);
+            var send = FlightMap.TransfromObject(flight);           
+            return await this.repository.UpdateAsync(send);
+        }
+
+        public async Task<bool> ChangeStatus(int id, int status)
+        {
+            var send = await this.repository.GetByIdAsync(id);
+            send.Status = status;
             return await this.repository.UpdateAsync(send);
         }
 

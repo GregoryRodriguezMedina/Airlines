@@ -33,6 +33,21 @@ namespace Airlines.Apis.Apis
         }
 
         // GET: api/Passagers/5
+        [HttpGet("Include/{id}&{includeBook}")]
+        public async Task<ActionResult<AirLines.Core.Resources.PassagerResponse>> GetIncludePassager(int id, bool includeBook)
+        {
+
+            var results = await this.PassagerService.GetById(id, includeBook);
+
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
+
+        // GET: api/Passagers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<AirLines.Core.Resources.PassagerResponse>> GetPassager(int id)
         {

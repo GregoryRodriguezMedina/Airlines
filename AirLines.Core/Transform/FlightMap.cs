@@ -56,7 +56,7 @@ namespace AirLines.Core.Transform
                 MinutesToArrive = request.MinutesToArrive,
                 Price = request.Price,
                 PriceChildren = request.PriceChildren,
-                Status = (int)this.DefaultStatus
+               // Status = (int)this.DefaultStatus
             };
         }
     }

@@ -1,10 +1,11 @@
 ﻿using AirLines.Core.Helper;
 using AirLines.Core.Transform;
+using AirLines.Core.Types;
 using AirLines.Infrastructure.Data.repository;
 
 
 namespace AirLines.Infrastructure.Data.Services
-{
+{   
     public interface IBookService
     {
         Task<IEnumerable<Core.Resources.BookResponse>> Get();
@@ -39,9 +40,22 @@ namespace AirLines.Infrastructure.Data.Services
             return BookMap.TransfromObject(result);
         }
 
-        public async Task<Core.Resources.BookResponse> GetById(int id)
+        public async Task<Core.Resources.BookResponse> GetById(int id, string[] includes)
         {
-            var result = await this.BookRepository.GetByIdAsync(id);
+
+            bool includePassager = false;
+            bool includeFlight = false;          
+            foreach (var include in includes)
+            {
+                if (include == BookInclude.Flight.ToString())
+                    includeFlight = true;
+                else if (include == BookInclude.Passager.ToString())
+                    includePassager = true;
+            }
+
+
+
+            var result = await this.BookRepository.GetByIdAsync(id, includeFlight, includePassager);
 
             var response = BookMap.TransfromObject(result);
 
@@ -52,6 +66,13 @@ namespace AirLines.Infrastructure.Data.Services
                 response.Flight = FlightMap.TransfromObject(result.Flight);
 
             return response;
+        }
+
+        public async Task<Core.Resources.BookResponse> GetById(int id)
+        {
+            var result = await this.BookRepository.GetByIdAsync(id);
+
+            return BookMap.TransfromObject(result);           
         }
 
         public async Task<bool> Add(Core.Resources.BookRequest book)
@@ -80,6 +101,7 @@ namespace AirLines.Infrastructure.Data.Services
         public async Task<bool> Put(int id, Core.Resources.BookRequest book)
         {
             var send = BookMap.TransfromObject(book);
+            
             return await this.BookRepository.UpdateAsync(send);
         }
 

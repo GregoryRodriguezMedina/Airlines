@@ -19,9 +19,10 @@ namespace Airlines.Apis.Apis
             //_context = context;
         }
 
+        
         // GET: api/Flights
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.FlightResponse>>> GetFlights(int? id, DateTime? from, DateTime? to, DateTime? depart, DateTime? arrival)
+        [HttpGet("GetByFilter")]
+        public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.FlightResponse>>> GetByFilterFlights(int? id, DateTime? from, DateTime? to, DateTime? depart, DateTime? arrival)
         {
             var results = await this.FlightService.Get(id, from, to, depart, arrival);
 
@@ -32,7 +33,7 @@ namespace Airlines.Apis.Apis
 
             return Ok(results);
         }
-
+        
 
 
         // GET: api/Flights
@@ -77,6 +78,33 @@ namespace Airlines.Apis.Apis
             try
             {
                 var result = await this.FlightService.Put(id, Flight);
+                if (!result)
+                {
+                    return NotFound();
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await FlightExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("ChangeStatus")]
+        public async Task<IActionResult> ChangeStatusFlight(int id, int status)
+        {           
+
+            try
+            {
+                var result = await this.FlightService.ChangeStatus(id, status);
                 if (!result)
                 {
                     return NotFound();

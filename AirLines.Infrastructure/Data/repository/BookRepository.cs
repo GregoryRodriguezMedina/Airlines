@@ -6,6 +6,7 @@ namespace AirLines.Infrastructure.Data.repository
 {   public interface IBookRepository : Core.Repository.IEfRepositoryBase<Core.Models.Book>
     {
         Task<bool> Exists(int id);
+        Task<Book> GetByIdAsync(int key, bool includeFlight, bool includePassager);
     }
     public partial class BookRepository : Core.Repository.EfRepositoryBase<Core.Models.Book>, IBookRepository
     {
@@ -18,12 +19,16 @@ namespace AirLines.Infrastructure.Data.repository
             return await this.Entity.AnyAsync(x => x.Id == id);
         }
 
-        public override async Task<Book> GetByIdAsync(int key)
+        public async Task<Book> GetByIdAsync(int key, bool includeFlight, bool includePassager)
         {
-           return await  this.Entity
-                                    .Include(a => a.Flight)
-                                    .Include(b => b.Passager)
-                                    .FirstOrDefaultAsync(c => c.Id == key);                          
+            var query = this.Entity;
+            if (includeFlight)
+                query.Include(a => a.Flight);
+
+            if (includePassager)
+                query.Include(b => b.Passager);
+                                    
+            return await query.FirstOrDefaultAsync(c => c.Id == key);                          
                        
         }
     }

@@ -8,6 +8,7 @@ namespace AirLines.Infrastructure.Data.Services
     {
         Task<IEnumerable<Core.Resources.PassagerResponse>> Get();
         Task<Core.Resources.PassagerResponse> GetById(int id);
+        Task<Core.Resources.PassagerResponse> GetById(int id, bool includeBook);
         Task<bool> Add(Core.Resources.PassagerRequest Passager);
         Task<bool> Put(int id, Core.Resources.PassagerRequest Passager);
         Task<bool> Remove(int id);
@@ -29,10 +30,16 @@ namespace AirLines.Infrastructure.Data.Services
             //AutoMapper.Mapper.Map<TResponse>(query);
             return PassagerMap.TransfromObject(result);
         }
-
         public async Task<Core.Resources.PassagerResponse> GetById(int id)
         {
             var result = await this.repository.GetByIdAsync(id);
+
+            return PassagerMap.TransfromObject(result);           
+        }
+
+        public async Task<Core.Resources.PassagerResponse> GetById(int id, bool includeBook)
+        {
+            var result = await this.repository.GetByIdAsync(id, includeBook);
            
             var response = PassagerMap.TransfromObject(result);
             if (result.Books != null)
