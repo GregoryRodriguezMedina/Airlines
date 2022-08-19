@@ -5,8 +5,8 @@ namespace AirLines.Core.Resources
     {
         public int Id { get; set; }
         public string Code { get; set; }
-        public int FromIdAirPort { get; set; }
-        public int ToIdAirPort { get; set; }
+       // public int FromIdAirPort { get; set; }
+       // public int ToIdAirPort { get; set; }
         public string Price { get; set; }
         public string PriceChildren { get; set; }
         public int LimitAgeChildren { get; set; }

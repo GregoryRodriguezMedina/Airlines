@@ -5,8 +5,8 @@ namespace AirLines.Infrastructure.Data.Services
 {
     public interface IAirPortService
     {
-        Task<IEnumerable<Core.Resources.AirPortResorce>> Get();
-        Task<Core.Resources.AirPortResorce> GetById(int id);
+        Task<IEnumerable<Core.Resources.AirPortResponse>> Get();
+        Task<Core.Resources.AirPortResponse> GetById(int id);
         Task<bool> Add(Core.Resources.AirPortRequest airPort);
         Task<bool> Put(int id, Core.Resources.AirPortRequest airPort);
         Task<bool> Remove(int id);
@@ -22,9 +22,9 @@ namespace AirLines.Infrastructure.Data.Services
             this.repository = repository;
         }
 
-        private List<Core.Resources.AirPortResorce> TransfromObject(IEnumerable<Core.Models.AirPort> models)
+        private List<Core.Resources.AirPortResponse> TransfromObject(IEnumerable<Core.Models.AirPort> models)
         {
-            List<Core.Resources.AirPortResorce> results = new List<Core.Resources.AirPortResorce>();
+            List<Core.Resources.AirPortResponse> results = new List<Core.Resources.AirPortResponse>();
             int len = models.Count();
             for (int i = 0; i < len; i++)
             {
@@ -34,9 +34,9 @@ namespace AirLines.Infrastructure.Data.Services
             return results;
         }
 
-        private Core.Resources.AirPortResorce TransfromObject(Core.Models.AirPort  model)
+        private Core.Resources.AirPortResponse TransfromObject(Core.Models.AirPort  model)
         {
-            return new Core.Resources.AirPortResorce
+            return new Core.Resources.AirPortResponse
             {
                 Id = model.Id,
                 Name = model.Name
@@ -52,14 +52,14 @@ namespace AirLines.Infrastructure.Data.Services
             };
         }
 
-        public async Task<IEnumerable<Core.Resources.AirPortResorce>> Get()
+        public async Task<IEnumerable<Core.Resources.AirPortResponse>> Get()
         {
             var result = await this.repository.GetAsync();
             //AutoMapper.Mapper.Map<TResponse>(query);
             return TransfromObject(result);
         }
 
-        public async Task<Core.Resources.AirPortResorce> GetById(int id)
+        public async Task<Core.Resources.AirPortResponse> GetById(int id)
         {
             var result = await this.repository.GetByIdAsync(id);
 
