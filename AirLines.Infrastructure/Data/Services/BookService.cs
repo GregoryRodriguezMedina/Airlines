@@ -1,4 +1,5 @@
-﻿using AirLines.Infrastructure.Data.repository;
+﻿using AirLines.Core.Helper;
+using AirLines.Infrastructure.Data.repository;
 
 
 namespace AirLines.Infrastructure.Data.Services
@@ -15,11 +16,18 @@ namespace AirLines.Infrastructure.Data.Services
 
     public partial class BookService : IBookService
     {
-        private readonly repository.IBookRepository repository;
+        private readonly repository.IBookRepository BookRepository;
+        private readonly IPassagerRepository PassagerRepository;
+        private readonly IFlightRepository FlightRepository;
 
-        public BookService(IBookRepository repository)
+        public BookService(IBookRepository repository
+                          ,IPassagerRepository passagerRepository
+                          ,IFlightRepository flightRepository
+        )
         {
-            this.repository = repository;
+            this.BookRepository = repository;
+            this.PassagerRepository = passagerRepository;
+            this.FlightRepository = flightRepository;
         }
 
         private List<Core.Resources.BookResponse> TransfromObject(IEnumerable<Core.Models.Book> models)
@@ -44,8 +52,7 @@ namespace AirLines.Infrastructure.Data.Services
                 Date = model.Date,
                 //Flight
                 //Passager
-              
-               
+                             
             };
         }
 
@@ -62,41 +69,58 @@ namespace AirLines.Infrastructure.Data.Services
 
         public async Task<IEnumerable<Core.Resources.BookResponse>> Get()
         {
-            var result = await this.repository.GetAsync();
+            var result = await this.BookRepository.GetAsync();
             //AutoMapper.Mapper.Map<TResponse>(query);
             return TransfromObject(result);
         }
 
         public async Task<Core.Resources.BookResponse> GetById(int id)
         {
-            var result = await this.repository.GetByIdAsync(id);
+            var result = await this.BookRepository.GetByIdAsync(id);
 
             return TransfromObject(result);
         }
 
-        public async Task<bool> Add(Core.Resources.BookRequest Book)
+        public async Task<bool> Add(Core.Resources.BookRequest book)
         {
-            var send = TransfromObject(Book);
-            return await this.repository.InsertAsync(send);
+            var passager = this.PassagerRepository.GetById(book.PassagerId);
+            if (passager == null)
+                throw new Exception("The Passager is not found it");
+
+            var flight = this.FlightRepository.GetById(book.FlightId);
+            if (flight == null)
+                throw new Exception("The Flight is not found it");
+
+
+            int age = Helper.CalculateAge(passager.BirthDate);
+
+            if (age > flight.LimitAgeChildren)
+                book.Price = flight.PriceChildren;
+            else
+                book.Price = flight.Price;
+
+            var send = TransfromObject(book);
+
+            return await this.BookRepository.InsertAsync(send);
         }
 
-        public async Task<bool> Put(int id, Core.Resources.BookRequest Book)
+        public async Task<bool> Put(int id, Core.Resources.BookRequest book)
         {
-            var send = TransfromObject(Book);
-            return await this.repository.UpdateAsync(send);
+            var send = TransfromObject(book);
+            return await this.BookRepository.UpdateAsync(send);
         }
 
         public async Task<bool> Remove(int id)
         {
-            var Book = await this.repository.GetByIdAsync(id);   
+            var Book = await this.BookRepository.GetByIdAsync(id);   
             if(Book == null) return false;
 
-            return await this.repository.DeleteAsync(Book);
+            return await this.BookRepository.DeleteAsync(Book);
         }
 
         public async Task<bool> Exists(int id)
         {
-            return await this.repository.Exists(id);
+            return await this.BookRepository.Exists(id);
         }
     }
 }

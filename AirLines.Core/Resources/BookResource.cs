@@ -3,6 +3,7 @@
     public class BookResource
     {
         public int Id { get; set; }
+        public decimal Price { get; set; }
         //public int FlightId { get; set; }
        // public int PassagerId { get; set; }
         public DateTime Date { get; set; }
@@ -17,5 +18,7 @@
     }
     public class BookRequest: BookResource
     {
+        public int PassagerId { get; set; }
+        public int FlightId { get; set; }
     }
 }

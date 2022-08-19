@@ -41,6 +41,8 @@ namespace AirLines.Infrastructure.Data
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
+                entity.Property(e => e.Price).HasColumnType("decimal");
+
                 entity.HasOne(d => d.Flight)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.FlightId)

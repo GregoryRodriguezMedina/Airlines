@@ -14,5 +14,6 @@ namespace AirLines.Core.Models
 
         public virtual Flight Flight { get; set; }
         public virtual Passager Passager { get; set; }
+        public decimal Price { get; set; }
     }
 }
