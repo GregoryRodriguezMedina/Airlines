@@ -10,6 +10,7 @@ namespace AirLines.Infrastructure.Data.Services
     {
         Task<IEnumerable<Core.Resources.BookResponse>> Get();
         Task<Core.Resources.BookResponse> GetById(int id);
+        Task<Core.Resources.BookResponse> GetById(int id, string[] includes);
         Task<bool> Add(Core.Resources.BookRequest Book);
         Task<bool> Put(int id, Core.Resources.BookRequest Book);
         Task<bool> Remove(int id);

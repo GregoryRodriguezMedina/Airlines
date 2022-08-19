@@ -47,6 +47,21 @@ namespace Airlines.Apis.Apis
             return Ok(results);
         }
 
+        // GET: api/Books/5
+        [HttpGet("Includes")]
+        public async Task<ActionResult<AirLines.Core.Resources.BookResponse>> GetIncludeBook(int id, string[] includes)
+        {
+
+            var results = await this.BookService.GetById(id, includes);
+
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
+
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
