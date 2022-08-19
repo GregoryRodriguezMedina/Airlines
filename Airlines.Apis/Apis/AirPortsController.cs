@@ -27,7 +27,7 @@ namespace Airlines.Apis.Apis
 
         // GET: api/AirPorts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AirPort>>> GetAirPorts()
+        public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.AirPortResorce>>> GetAirPorts()
         {         
             var results=  await this.AirPortService.Get();
 
@@ -41,7 +41,7 @@ namespace Airlines.Apis.Apis
 
         // GET: api/AirPorts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AirPort>> GetAirPort(int id)
+        public async Task<ActionResult<AirLines.Core.Resources.AirPortResorce>> GetAirPort(int id)
         {
 
             var results = await this.AirPortService.GetById(id);
@@ -57,7 +57,7 @@ namespace Airlines.Apis.Apis
         // PUT: api/AirPorts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAirPort(int id, AirPort airPort)
+        public async Task<IActionResult> PutAirPort(int id, AirLines.Core.Resources.AirPortRequest airPort)
         {
             if (id != airPort.Id)
             {
@@ -90,7 +90,7 @@ namespace Airlines.Apis.Apis
         // POST: api/AirPorts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<AirPort>> PostAirPort(AirPort airPort)
+        public async Task<IActionResult> PostAirPort(AirLines.Core.Resources.AirPortRequest airPort)
         {
           if (airPort == null)
           {
@@ -104,13 +104,13 @@ namespace Airlines.Apis.Apis
                 {
                     return NotFound();
                 }
+
+                return CreatedAtAction("GetAirPort", new { id = airPort.Id }, airPort);
             }
             catch (Exception)
             {
                 return BadRequest("Error while try to inserting row.");
-            }
-
-            return CreatedAtAction("GetAirPort", new { id = airPort.Id }, airPort);
+            }            
         }
 
         // DELETE: api/AirPorts/5

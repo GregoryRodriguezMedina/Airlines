@@ -9,10 +9,10 @@ namespace AirLines.Infrastructure.Data.Services
 {
     public interface IAirPortService
     {
-        Task<IEnumerable<Core.Models.AirPort>> Get();
-        Task<Core.Models.AirPort> GetById(int id);
-        Task<bool> Add(Core.Models.AirPort airPort);
-        Task<bool> Put(int id, Core.Models.AirPort airPort);
+        Task<IEnumerable<Core.Resources.AirPortResorce>> Get();
+        Task<Core.Resources.AirPortResorce> GetById(int id);
+        Task<bool> Add(Core.Resources.AirPortRequest airPort);
+        Task<bool> Put(int id, Core.Resources.AirPortRequest airPort);
         Task<bool> Remove(int id);
         Task<bool> Exists(int id);
     }
@@ -26,24 +26,60 @@ namespace AirLines.Infrastructure.Data.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<Core.Models.AirPort>> Get()
+        private List<Core.Resources.AirPortResorce> TransfromObject(IEnumerable<Core.Models.AirPort> models)
         {
-            return await this.repository.GetAsync();
+            List<Core.Resources.AirPortResorce> results = new List<Core.Resources.AirPortResorce>();
+            int len = models.Count();
+            for (int i = 0; i < len; i++)
+            {
+                results.Add(TransfromObject(models.ElementAt(i)));
+            }
+
+            return results;
         }
 
-        public async Task<Core.Models.AirPort> GetById(int id)
+        private Core.Resources.AirPortResorce TransfromObject(Core.Models.AirPort  model)
         {
-            return await this.repository.GetByIdAsync(id);
+            return new Core.Resources.AirPortResorce
+            {
+                Id = model.Id,
+                Name = model.Name
+            };
         }
 
-        public async Task<bool> Add(Core.Models.AirPort airPort)
+        private Core.Models.AirPort TransfromObject(Core.Resources.AirPortRequest request)
         {
-            return await this.repository.InsertAsync(airPort);
+            return new Core.Models.AirPort 
+            {
+                Id = request.Id,
+                Name = request.Name
+            };
         }
 
-        public async Task<bool> Put(int id, Core.Models.AirPort airPort)
+        public async Task<IEnumerable<Core.Resources.AirPortResorce>> Get()
         {
-            return await this.repository.UpdateAsync(airPort);
+            var result = await this.repository.GetAsync();
+            //AutoMapper.Mapper.Map<TResponse>(query);
+            return TransfromObject(result);
+        }
+
+        public async Task<Core.Resources.AirPortResorce> GetById(int id)
+        {
+            var result = await this.repository.GetByIdAsync(id);
+
+            return TransfromObject(result);
+        }
+
+        public async Task<bool> Add(Core.Resources.AirPortRequest airPort)
+        {
+            var send = TransfromObject(airPort);
+            return await this.repository.InsertAsync(send);
+        }
+
+        public async Task<bool> Put(int id, Core.Resources.AirPortRequest airPort)
+        {
+            var send = TransfromObject(airPort);
+            return await this.repository.UpdateAsync(send);
         }
 
         public async Task<bool> Remove(int id)
