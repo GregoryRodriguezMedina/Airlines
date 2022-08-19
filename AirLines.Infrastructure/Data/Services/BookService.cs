@@ -50,6 +50,7 @@ namespace AirLines.Infrastructure.Data.Services
                 CheckOut = model.CheckOut,
                 Id = model.Id,  
                 Date = model.Date,
+                Price = model.Price,
                 //Flight
                 //Passager
                              
@@ -64,6 +65,7 @@ namespace AirLines.Infrastructure.Data.Services
                 CheckOut = request.CheckOut,
                 Id = request.Id,
                 Date = request.Date,
+                Price=request.Price,
             };
         }
 
