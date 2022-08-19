@@ -18,6 +18,8 @@ namespace AirLines.Infrastructure.Data.Services
         Task<bool> Put(int id, Core.Resources.FlightRequest Flight);
         Task<bool> Remove(int id);
         Task<bool> Exists(int id);
+
+        Task<IEnumerable<Core.Resources.FlightResponse>> Get(DateTime from, DateTime to);
     }
 
     public partial class FlightService : IFlightService
@@ -81,6 +83,12 @@ namespace AirLines.Infrastructure.Data.Services
             };
         }
 
+        public async Task<IEnumerable<Core.Resources.FlightResponse>> Get(DateTime from, DateTime to)
+        {
+            var result = await this.repository.GetAsync(from, to);
+            //AutoMapper.Mapper.Map<TResponse>(query);
+            return TransfromObject(result);
+        }
         public async Task<IEnumerable<Core.Resources.FlightResponse>> Get()
         {
             var result = await this.repository.GetAsync();

@@ -21,6 +21,22 @@ namespace Airlines.Apis.Apis
 
         // GET: api/Flights
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.FlightResponse>>> GetFlights(DateTime from, DateTime to)
+        {
+            var results = await this.FlightService.Get(from, to);
+
+            if (results == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(results);
+        }
+
+
+
+        // GET: api/Flights
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<AirLines.Core.Resources.FlightResponse>>> GetFlights()
         {
             var results = await this.FlightService.Get();
