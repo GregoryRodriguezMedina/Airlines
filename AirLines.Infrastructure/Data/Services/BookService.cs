@@ -1,4 +1,5 @@
 ﻿using AirLines.Core.Helper;
+using AirLines.Core.Transform;
 using AirLines.Infrastructure.Data.repository;
 
 
@@ -29,58 +30,28 @@ namespace AirLines.Infrastructure.Data.Services
             this.PassagerRepository = passagerRepository;
             this.FlightRepository = flightRepository;
         }
-
-        private List<Core.Resources.BookResponse> TransfromObject(IEnumerable<Core.Models.Book> models)
-        {
-            List<Core.Resources.BookResponse> results = new List<Core.Resources.BookResponse>();
-            int len = models.Count();
-            for (int i = 0; i < len; i++)
-            {
-                results.Add(TransfromObject(models.ElementAt(i)));
-            }
-
-            return results;
-        }
-
-        private Core.Resources.BookResponse TransfromObject(Core.Models.Book  model)
-        {
-            return new Core.Resources.BookResponse
-            { 
-                CheckIn = model.CheckIn,    
-                CheckOut = model.CheckOut,
-                Id = model.Id,  
-                Date = model.Date,
-                Price = model.Price,
-                //Flight
-                //Passager
-                             
-            };
-        }
-
-        private Core.Models.Book TransfromObject(Core.Resources.BookRequest request)
-        {
-            return new Core.Models.Book 
-            {
-                CheckIn = request.CheckIn,
-                CheckOut = request.CheckOut,
-                Id = request.Id,
-                Date = request.Date,
-                Price=request.Price,
-            };
-        }
+            
 
         public async Task<IEnumerable<Core.Resources.BookResponse>> Get()
         {
             var result = await this.BookRepository.GetAsync();
             //AutoMapper.Mapper.Map<TResponse>(query);
-            return TransfromObject(result);
+            return BookMap.TransfromObject(result);
         }
 
         public async Task<Core.Resources.BookResponse> GetById(int id)
         {
             var result = await this.BookRepository.GetByIdAsync(id);
 
-            return TransfromObject(result);
+            var response = BookMap.TransfromObject(result);
+
+            if(result.Passager != null)
+                response.Passager = PassagerMap.TransfromObject(result.Passager);
+
+            if (result.Flight != null)
+                response.Flight = FlightMap.TransfromObject(result.Flight);
+
+            return response;
         }
 
         public async Task<bool> Add(Core.Resources.BookRequest book)
@@ -101,14 +72,14 @@ namespace AirLines.Infrastructure.Data.Services
             else
                 book.Price = flight.Price;
 
-            var send = TransfromObject(book);
+            var send = BookMap.TransfromObject(book);
 
             return await this.BookRepository.InsertAsync(send);
         }
 
         public async Task<bool> Put(int id, Core.Resources.BookRequest book)
         {
-            var send = TransfromObject(book);
+            var send = BookMap.TransfromObject(book);
             return await this.BookRepository.UpdateAsync(send);
         }
 

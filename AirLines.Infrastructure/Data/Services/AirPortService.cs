@@ -1,4 +1,5 @@
-﻿using AirLines.Infrastructure.Data.repository;
+﻿using AirLines.Core.Transform;
+using AirLines.Infrastructure.Data.repository;
 
 
 namespace AirLines.Infrastructure.Data.Services
@@ -21,60 +22,31 @@ namespace AirLines.Infrastructure.Data.Services
         {
             this.repository = repository;
         }
-
-        private List<Core.Resources.AirPortResponse> TransfromObject(IEnumerable<Core.Models.AirPort> models)
-        {
-            List<Core.Resources.AirPortResponse> results = new List<Core.Resources.AirPortResponse>();
-            int len = models.Count();
-            for (int i = 0; i < len; i++)
-            {
-                results.Add(TransfromObject(models.ElementAt(i)));
-            }
-
-            return results;
-        }
-
-        private Core.Resources.AirPortResponse TransfromObject(Core.Models.AirPort  model)
-        {
-            return new Core.Resources.AirPortResponse
-            {
-                Id = model.Id,
-                Name = model.Name
-            };
-        }
-
-        private Core.Models.AirPort TransfromObject(Core.Resources.AirPortRequest request)
-        {
-            return new Core.Models.AirPort 
-            {
-                Id = request.Id,
-                Name = request.Name
-            };
-        }
+      
 
         public async Task<IEnumerable<Core.Resources.AirPortResponse>> Get()
         {
             var result = await this.repository.GetAsync();
             //AutoMapper.Mapper.Map<TResponse>(query);
-            return TransfromObject(result);
+            return AirPortMap.TransfromObject(result);
         }
 
         public async Task<Core.Resources.AirPortResponse> GetById(int id)
         {
             var result = await this.repository.GetByIdAsync(id);
 
-            return TransfromObject(result);
+            return AirPortMap.TransfromObject(result);
         }
 
         public async Task<bool> Add(Core.Resources.AirPortRequest airPort)
         {
-            var send = TransfromObject(airPort);
+            var send = AirPortMap.TransfromObject(airPort);
             return await this.repository.InsertAsync(send);
         }
 
         public async Task<bool> Put(int id, Core.Resources.AirPortRequest airPort)
         {
-            var send = TransfromObject(airPort);
+            var send = AirPortMap.TransfromObject(airPort);
             return await this.repository.UpdateAsync(send);
         }
 

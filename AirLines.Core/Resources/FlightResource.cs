@@ -22,8 +22,8 @@ namespace AirLines.Core.Resources
     public class FlightResponse : FlightResource
     {
         public int Status { get; set; }
-        public virtual AirPortResorce FromIdAirPortNavigation { get; set; }
-        public virtual AirPortResorce ToIdAirPortNavigation { get; set; }
+        public virtual AirPortResorce FromAirPort { get; set; }
+        public virtual AirPortResorce ToAirPort { get; set; }
         public virtual ICollection<BookResponse> Books { get; set; }
     }
     public class FlightRequest : FlightResource

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AirLines.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirLines.Infrastructure.Data.repository
 {
@@ -15,6 +16,13 @@ namespace AirLines.Infrastructure.Data.repository
         public async Task<bool> Exists(int id)
         {
             return await this.Entity.AnyAsync(x => x.Id == id);
+        }
+
+        public override async Task<Passager> GetByIdAsync(int key)
+        {
+            return await this.Entity
+                             .Include(b=> b.Books)
+                             .FirstOrDefaultAsync(a => a.Id == key);                              
         }
     }
 }
